@@ -1,16 +1,9 @@
 "use client";
 import QRCodePlaceholder from "@/components/QRCodePlaceholder";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
-import { RefreshCw, Smartphone, X } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useState } from "react";
 
 export default function Devices() {

@@ -4,6 +4,8 @@ import "./globals.css";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { cookies } from "next/headers";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,13 +35,8 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <main className="flex-1 overflow-y-auto p-6">
-            <SidebarTrigger />
-            {children}
-          </main>
-        </SidebarProvider>
+        <LayoutWrapper defaultOpen={defaultOpen}>{children}</LayoutWrapper>
+        <Toaster position="top-right" />
       </body>
     </html>
   );
