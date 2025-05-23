@@ -23,15 +23,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { api } from "@/lib/axios";
-import { toast } from "sonner";
-import Cookies from "js-cookie";
+import { useLogin } from "./hooks/useLogin";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -39,63 +33,15 @@ export default function LoginPage() {
       password: "",
     },
   });
-
-  const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-
-    try {
-      const response = await api.post("/auth/login", data);
-      const { token, user } = response.data;
-
-      if (response.status === 200) {
-        // Store token in cookie
-        Cookies.set("token", token, {
-          expires: 7, // 7 days
-          path: "/",
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
-        });
-
-        // Show success message
-        toast.success("Login successful!");
-
-        // Get the redirect URL from query params or default to home
-        const from = searchParams.get("from") || "/";
-        router.push(from);
-      }
-    } catch (error: any) {
-      // Handle error response
-      const errorMessage =
-        error.response?.data?.message || "Login failed. Please try again.";
-
-      // Show error toast
-      toast.error(errorMessage);
-
-      // If there are validation errors from the server
-      if (error.response?.data?.errors) {
-        const errors = error.response.data.errors;
-        Object.keys(errors).forEach((key) => {
-          form.setError(key as keyof LoginFormData, {
-            type: "server",
-            message: errors[key],
-          });
-        });
-      }
-
-      // Clear password field on error
-      form.setValue("password", "");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { onSubmit, isLoading } = useLogin(form);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-[400px]">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl text-center">Sign in</CardTitle>
           <CardDescription className="text-center">
-            Sign in to your WhatsApp Automation account
+            Sign in to your account
           </CardDescription>
         </CardHeader>
         <Form {...form}>

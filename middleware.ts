@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check if the path is public
-  const isPublicPath = publicPaths.includes(pathname);
+  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
   // Get token from cookies
   const token = request.cookies.get("token")?.value;
